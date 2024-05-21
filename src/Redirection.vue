@@ -24,9 +24,12 @@
         // Get the query string parameter
         const params = queryString.parse(window.location.search.slice(1));
         if (params.q) {
-          // Decode the hex-encoded query string
-          const decodedQuery = this.hexToAscii(params.q);
-          const url = `https://${decodedQuery}`;
+          // Split the URL by '/'
+          const parts = params.q.split('/');
+          // Decode the first part of the URL
+          const decodedFirstPart = this.hexToAscii(parts[0]);
+          // Join the decoded first part with the rest of the URL
+          const url = `https://${decodedFirstPart}/${parts.slice(1).join('/')}`;
           // Redirect the user to the decoded URL
           window.location.href = url;
         }
