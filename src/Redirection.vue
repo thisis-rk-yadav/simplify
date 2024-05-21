@@ -24,17 +24,28 @@
         // Get the query string parameter
         const params = queryString.parse(window.location.search.slice(1));
         if (params.q) {
-          // Split the URL by '/'
-          const parts = params.q.split('/');
-          // Decode the first part of the URL
-          const decodedFirstPart = this.hexToAscii(parts[0]);
-          // Join the decoded first part with the rest of the URL
-          const url = `https://${decodedFirstPart}/${parts.slice(1).join('/')}`;
-          // Redirect the user to the decoded URL
-          window.location.href = url;
+          // Find the first slash
+          const firstSlashIndex = params.q.indexOf('/');
+          if (firstSlashIndex !== -1) {
+            // Split the string into the part before and after the first slash
+            const hexPart = params.q.substring(0, firstSlashIndex);
+            const restPart = params.q.substring(firstSlashIndex);
+            
+            // Decode the hex part
+            const decodedFirstPart = this.hexToAscii(hexPart);
+            
+            // Combine the decoded part with the rest of the URL
+            const url = `https://${decodedFirstPart}${restPart}`;
+            
+            // Redirect the user to the decoded URL
+            window.location.href = url;
+          } else {
+            // If there's no slash, just decode the whole part
+            const url = `https://${this.hexToAscii(params.q)}`;
+            window.location.href = url;
+          }
         }
       }
     }
   }
-  </script>
-  
+  </script>  
